@@ -7,19 +7,23 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = env("DATABASE_URL")
 }
 
 model User {
   id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @updatedAt 
 
-  email String 
+  email String @unique
   hash String
 
   firstName String?
   lastname String?
+
+  @@map("users")
+
+  bookmarks Bookmark[]
 }
 
 model Bookmark {
@@ -30,4 +34,9 @@ model Bookmark {
   title String 
   description String?
   link String
+
+
+userId Int
+user User @relation(fields: [userId], references:[id])
+  @@map("bookmarks")
 }
